@@ -20,7 +20,6 @@ const AddTheater = () => {
   useEffect(() => {
     Axios.get(`${loc_url}/get`).then((response) => {
       setLocationList(response.data);
-      console.log(response.data);
     });
   }, []);
 

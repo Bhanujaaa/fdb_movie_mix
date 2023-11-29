@@ -5,27 +5,21 @@ import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import "../Styling/reservation.css"
 const Reservation = () => {
-  const { showtime_id, total_price, encodedObject } = useParams();
-  
-  const decodedObject = JSON.parse(decodeURIComponent(encodedObject));
+  const { reservation_id } = useParams();
   const navigate = useNavigate();
   const [reserved, setReserved] = useState([]);
-  const count = Object.keys(decodedObject).length
   const user_id= secureLocalStorage.getItem("user_id");
   const current_date=new Date();
   const booking_date = current_date.getDate();
       
-      const total_amount=total_price;
-      const num_tickets=count;
   useEffect(() => {
     // Fetch movie details based on movieId
-    Axios.post(
-      `http://localhost:8080/ticket/reserve`,{booking_date,total_amount,num_tickets,user_id,showtime_id,decodedObject})
+    Axios.get(`http://localhost:8080/ticket/show/${reservation_id}`)
       .then((response) => {
-        setReserved(response.data);
+        setReserved(response.data)
       })
-      .catch((error) => console.error(error));
-}, []);
+      .catch((err) => console.log(err));
+  }, []);
 
 return (
     <div>

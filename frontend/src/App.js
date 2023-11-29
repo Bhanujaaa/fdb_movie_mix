@@ -70,7 +70,7 @@ function App() {
           />
           <Route path="/seats/:showtime_id/:available_seats" element={<SeatArrangement />} />
           <Route
-            path="/reservation/:showtime_id/:total_price/:encodedObject"
+            path="/reservation/:reservation_id"
             element={<Reservation />}
           />
           <Route

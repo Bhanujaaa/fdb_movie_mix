@@ -6,7 +6,7 @@ import secureLocalStorage from "react-secure-storage";
 import Modal from 'react-modal';
 
 const SeatsBooking = () => {
-  const { showtime_id,available_seats } = useParams();
+  const { showtime_id, available_seats } = useParams();
   const [seatData, setSeatData] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [updatedSeatData, setUpdated] = useState([]);
@@ -32,39 +32,49 @@ const SeatsBooking = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    Navigation()
   };
-  const Navigation = (DiscountedPrice) => {
+  const Navigation = (updatedPrice) => {
+    const current_date = new Date();
+    const booking_date = current_date.getDate();
     const confirmationMessage = `For booking of the seats: ${selectedSeats
       .map((seat) => seat.seat_name)
-      .join(", ")} The toal price is ${DiscountedPrice} `;
+      .join(", ")} The toal price is ${updatedPrice} `;
     if (window.confirm(confirmationMessage)) {
       Axios.post(updateUrl, { showtime_id, selectedSeats })
         .then((response) => {
+          const totalseats = available_seats - selectedSeats.length
+          Axios.post("http://localhost:8080/showtime/seats/update", { showtime_id, totalseats })
+            .then((response) => {
+            })
+            .catch((error) => {
+              console.error("Error updating seats:", error);
+            });
+          const encodedObject = encodeURIComponent(
+            JSON.stringify(selectedSeats)
+          );
+          const count = selectedSeats.length
+          const total_amount = updatedPrice;
+          const num_tickets = count;
+          const decodedObject = selectedSeats
+          Axios.get(`http://localhost:8080/coupon/set/${user_id}/${coupon_id}`)
+            .then((response) => {
+            })
+            .catch((err) => console.log(err));
+          Axios.post(
+            `http://localhost:8080/ticket/reserve`, { booking_date, total_amount, num_tickets, user_id, showtime_id, decodedObject })
+            .then((response) => {
+              console.log(response.data[0])
+              const reservation_id = response.data[0].reservation_id
+              navigate(`/reservation/${reservation_id}`)
+            })
+
           // Handle success, e.g., navigate to the booking page
-          // alert('Booking successful! Redirecting to booking page...');
+          alert('Booking successful! Redirecting to booking page...');
         })
         .catch((error) => {
           console.error("Error updating seats:", error);
         });
-        const totalseats=available_seats-selectedSeats.length
-        Axios.post("http://localhost:8080/showtime/seats/update", { showtime_id, totalseats})
-        .then((response) => {
-        })
-        .catch((error) => {
-          console.error("Error updating seats:", error);
-        });
-      alert("Booking confirmed! Redirecting to booking page...");
-      const encodedObject = encodeURIComponent(
-        JSON.stringify(selectedSeats)
-      );
-      Axios.get(`http://localhost:8080/coupon/set/${user_id}/${coupon_id}`)
-        .then((response) => {
-        })
-        .catch((err) => console.log(err));
-      navigate(
-        `/reservation/${showtime_id}/${DiscountedPrice}/${encodedObject}`
-      );
+
     } else {
       // If the user clicks "Cancel" in the confirmation dialog,
       // you can handle it here, for example, showing a message.

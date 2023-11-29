@@ -30,6 +30,7 @@ connection.query(query,[showtime_id], (err, results) => {
 });
 });
 
+
 router.post('/reserve', (req, res, next) => {
   const booking_date = new Date();
   const num_tickets = req.body.num_tickets;
@@ -83,6 +84,17 @@ router.post('/reserve', (req, res, next) => {
   });
 });
 
-
+router.get("/show/:reservation_id", (req, res, next) => {
+  reservation_id=req.params.reservation_id;
+  const queryshow= `select * from reservations r join show_time s on s.show_time_id=r.showtime_id join theater t on t.theater_id=s.theater_id 
+  join movies m on m.movie_id=s.movie_id join location l on l.location_id=t.location_id where r.reservation_id=${reservation_id}`
+connection.query(queryshow,[], (err, results) => {
+  if (!err) {
+    return res.status(200).json(results);
+  } else {
+    return res.status(500).json(err);
+  }
+});
+});
   
 module.exports=router;
