@@ -10,11 +10,7 @@ router.get("/get", (req, res, next) => {
         const parking = results;
         res.status(200).json(parking);
       } else {
-<<<<<<< HEAD
-        res.status(404).json({ message: "not found" });
-=======
         res.status(404).json({ message: "Parking Area not found" });
->>>>>>> b759eaf000623c5629561d7aa5ad3da3c8f57d05
       }
     } else {
       res.status(500).json(err);

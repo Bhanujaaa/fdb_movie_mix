@@ -7,11 +7,10 @@ const ProducerCard = ({ producer }) => {
 
   return (
     <div className="movie-card">
-      <h5>{producer.movie_person_name}</h5>
-      {/* <img src={producer.image_url} alt={producer.movie_person_name} /> */}
-      {/* <div className="movie-details">
+      <img src={producer.image_url} alt={producer.movie_person_name} />
+      <div className="movie-details">
         <h3>{producer.movie_person_name}</h3>
-      </div> */}
+      </div>
     </div>
   );
 };
