@@ -7,8 +7,8 @@ const ShowtimeList = () => {
   const navigate = useNavigate();
   useEffect(() => {
     Axios.get(`http://localhost:8080/st/get`).then((response) => {
-      // setShowtime(response.data);
-      console.log(response)
+      setShowtime(response.data);
+      // console.log(response)
     });
   }, []);
 
