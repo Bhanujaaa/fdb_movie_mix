@@ -6,7 +6,8 @@ router.post("/get", (req, res, next) => {
    const seatID=req.body.selectedSeats;
    const seatIds = seatID.map(seat => seat.seat_id);
     const seatIdsTuple = `(${seatIds.join(', ')})`;
-  var query = `select sum(ticket_price) as total_price from tickets where showtime_id=${showtime_id} and seat_id in ${seatIdsTuple}`;
+  var query = `select sum(ticket_price) as total_price from tickets where showtime_id=${showtime_id}
+   and seat_id in ${seatIdsTuple}`;
   connection.query(query,[showtime_id], (err, results) => {
     if (!err) {
       return res.status(200).json(results);
